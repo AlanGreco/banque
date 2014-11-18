@@ -3,6 +3,7 @@
 	<name>BanqueBeans</name>
 	<comment></comment>
 	<projects>
+		<project>BanqueEar</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -4,5 +4,9 @@
         <dependent-module archiveName="BanqueEntities.jar" deploy-path="/lib" handle="module:/resource/BanqueEntities/BanqueEntities">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="BanqueBeans.jar" deploy-path="/" handle="module:/resource/BanqueBeans/BanqueBeans">
+            <dependent-object/>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
     </wb-module>
 </project-modules>

@@ -4,6 +4,7 @@
 	<comment></comment>
 	<projects>
 		<project>BanqueEntities</project>
+		<project>BanqueBeans</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
