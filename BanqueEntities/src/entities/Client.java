@@ -28,6 +28,7 @@ public class Client implements Serializable {
 
 	public Client() {
 		super();
+		
 
 	}
 
