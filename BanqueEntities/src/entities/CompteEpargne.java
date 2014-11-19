@@ -19,4 +19,12 @@ public class CompteEpargne extends Compte implements Serializable {
 		super();
 	}
 
+	public int getTauxInteret() {
+		return tauxInteret;
+	}
+
+	public void setTauxInteret(int tauxInteret) {
+		this.tauxInteret = tauxInteret;
+	}
+
 }
