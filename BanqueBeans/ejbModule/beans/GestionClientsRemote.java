@@ -12,5 +12,6 @@ public interface GestionClientsRemote {
 	public void supprimerClient (Client c);
 	public void modifierMotDePasse (String mdp, Client c);
 	public List<Client> getListeLecteurs();
+	
 
 }
