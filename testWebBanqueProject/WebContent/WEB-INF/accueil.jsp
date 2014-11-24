@@ -1,3 +1,6 @@
+
+<%@page import="entities.Compte"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="entities.Client"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -69,5 +72,17 @@
 		Ajouter un compte Epargne
 	</button>
 	</form>
+	
+<% ArrayList<Compte> listeCompte = (ArrayList<Compte>) request.getAttribute("listeCompte");
+				for (int i=0; i<listeCompte.size(); i++)
+				{out.println (listeCompte.get(i).getSolde());
+				if (listeCompte.get(i).getClass().toString() == "CompteStandard")
+				{
+					out.println ("comptestandard <br>");
+				}
+				
+				}
+				%>
+
 </body>
 </html>

@@ -1,5 +1,7 @@
 package beans;
 
+import java.util.ArrayList;
+
 import javax.ejb.Remote;
 
 import entities.Compte;
@@ -8,4 +10,5 @@ import entities.Compte;
 public interface GestionCompteRemote {
 public Compte ajouterCompte (Compte compte);
 public void supprimerCompte (Compte compte);
+public ArrayList<Compte> recupererCompteClient (int id); 
 }
