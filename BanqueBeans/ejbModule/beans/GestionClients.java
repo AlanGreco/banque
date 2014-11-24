@@ -17,13 +17,18 @@ public class GestionClients implements GestionClientsRemote, GestionClientsLocal
 
 	@PersistenceContext
 	EntityManager em;
-	
-    /**
-     * Default constructor. 
-     */
-    public GestionClients() {
-        // TODO Auto-generated constructor stub
-    }
+	private String login;
+	private int id;
+	/**
+	 * Default constructor. 
+	 */
+	public GestionClients() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public GestionClients(String login) {
+		this.login = login;
+	}
 
 	@Override
 	public Client ajouterClient(Client c) {
@@ -37,7 +42,7 @@ public class GestionClients implements GestionClientsRemote, GestionClientsLocal
 		// TODO Auto-generated method stub
 		c=em.find(Client.class,c.getId());
 		em.remove(c);
-		
+
 	}
 
 	@Override
@@ -49,9 +54,45 @@ public class GestionClients implements GestionClientsRemote, GestionClientsLocal
 
 
 	@Override
-	public List<Client> getListeLecteurs() {
+	public List<Client> getListeClients() {
 		// TODO Auto-generated method stub
 		return (List<Client>) em.createQuery("Select c from Client c").getResultList();
+	}
+
+	@Override
+	public boolean authenthifierClient(String login, String mdp) {
+		String request = "Select c from Client c Where login = '"+login+"'";
+		List<Client> listClient = (List<Client>) em.createQuery(request).getResultList();
+		if (listClient.size() == 0){
+			return false;
+		}
+		if(!listClient.get(0).getPassword().equals(mdp)){
+			return false;
+		}
+		id = listClient.get(0).getId();
+		return true;
+	}
+
+	public void setLogin(String login){
+		this.login = login;
+	}
+	public String getLogin(){
+		return login;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	@Override
+	public Client getClientById(int id) {
+		Client client = new Client();
+		client = em.find(Client.class,id);
+		return client;
 	}
 
 }

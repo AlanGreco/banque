@@ -3,12 +3,10 @@ package entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.*;
 
 /**
  * Entity implementation class for Entity: Client
- *
  */
 @Entity
 public class Client implements Serializable {

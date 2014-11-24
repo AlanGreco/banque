@@ -5,6 +5,7 @@
 	<projects>
 		<project>BanqueEntities</project>
 		<project>BanqueBeans</project>
+		<project>testWebBanqueProject</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

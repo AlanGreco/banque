@@ -1,13 +1,15 @@
 package beans;
 
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import entities.Compte;
 
 /**
  * Session Bean implementation class GestionCompte
  */
-@Stateful
+@Stateless
 public class GestionCompte implements GestionCompteRemote, GestionCompteLocal {
 
     /**
@@ -16,17 +18,20 @@ public class GestionCompte implements GestionCompteRemote, GestionCompteLocal {
     public GestionCompte() {
         // TODO Auto-generated constructor stub
     }
+    
+    @PersistenceContext
+	EntityManager em;
 
 	@Override
 	public Compte ajouterCompte(Compte compte) {
-		// TODO Auto-generated method stub
-		return null;
+		em.persist(compte);
+		return compte;	
 	}
 
 	@Override
 	public void supprimerCompte(Compte compte) {
-		// TODO Auto-generated method stub
-		
+		compte = em.find(Compte.class,compte.getId());
+		em.remove(compte);
 	}
 
 }

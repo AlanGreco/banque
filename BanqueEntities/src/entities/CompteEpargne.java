@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class CompteEpargne extends Compte implements Serializable {
 
-	private int tauxInteret;
+	private int tauxInteret ;
 	private static final long serialVersionUID = 1L;
 
 	public CompteEpargne() {

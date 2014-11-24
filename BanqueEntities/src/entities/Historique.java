@@ -39,5 +39,6 @@ public class Historique implements Serializable {
 	public void setMouvements(ArrayList<Double> mouvements) {
 		this.mouvements = mouvements;
 	}
+	
 
 }
