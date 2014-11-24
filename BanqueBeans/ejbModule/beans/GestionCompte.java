@@ -46,6 +46,4 @@ public class GestionCompte implements GestionCompteRemote, GestionCompteLocal {
 		return listCompte;
 	}
 	
-
-
 }

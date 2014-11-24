@@ -1,4 +1,3 @@
-
 <%@page import="entities.Compte"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="entities.Client"%>
@@ -75,12 +74,7 @@
 	
 <% ArrayList<Compte> listeCompte = (ArrayList<Compte>) request.getAttribute("listeCompte");
 				for (int i=0; i<listeCompte.size(); i++)
-				{out.println (listeCompte.get(i).getSolde());
-				if (listeCompte.get(i).getClass().toString() == "CompteStandard")
-				{
-					out.println ("comptestandard <br>");
-				}
-				
+				{out.println (listeCompte.get(i).getSolde());				
 				}
 				%>
 
