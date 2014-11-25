@@ -1,3 +1,6 @@
+<%@page import="entities.Compte"%>
+<%@page import="java.util.ArrayList"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page import="entities.Client"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -15,7 +18,7 @@
 <body>
 	Bienvenue dans votre espace personel :
 	<%=request.getAttribute("login")%>
-
+<% ArrayList<Compte> couocu = (ArrayList<Compte>) request.getAttribute("listecompte"); %>
 
 	<a href="accueil"></a>
 
@@ -31,7 +34,6 @@
 			</button>
 			<a class="navbar-brand" href="#">Banque</a>
 		</div>
-
 		<!-- Collect the nav links, forms, and other content for toggling -->
 		<div class="collapse navbar-collapse"
 			id="bs-example-navbar-collapse-1">

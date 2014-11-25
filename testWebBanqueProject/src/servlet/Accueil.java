@@ -2,6 +2,7 @@ package servlet;
 
 import java.io.IOException;
 
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +18,9 @@ import beans.GestionClientsRemote;
 @WebServlet("/accueil")
 public class Accueil extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	@EJB(name = "GestionClients")
+	GestionClientsRemote gestionClient;
+	
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
