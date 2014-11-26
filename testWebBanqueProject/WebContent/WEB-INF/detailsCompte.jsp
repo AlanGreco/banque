@@ -21,10 +21,21 @@
    <c:if test="${compteSelectionne.class.name == 'entities.CompteStandard' || compteSelectionne.class.name == 'entities.ComptePlatine'}">
    <tr style="height:20px;"> 
       <td>Penalité : </td>
-      <td>      	
+      <td> 
+         	<c:out value="${compteSelectionne.penalite}" />     	
       </td> 
    </tr> 
    </c:if>
+ <c:if test="${compteSelectionne.class.name == 'entities.ComptePlatine'}">
+   <tr style="height:20px;"> 
+      <td>Penalité : </td>
+      <td> 
+         	<c:out value="${compteSelectionne.penalite}" />     	
+      </td> 
+   </tr> 
+   </c:if>
+     
+<!--    decouvertAutorise -->
 </table> 
 	</div>
 </body>
