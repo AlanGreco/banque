@@ -53,5 +53,23 @@ public class GestionCompte implements GestionCompteRemote, GestionCompteLocal {
 		compte = em.find(Compte.class,idCompte);
 		return compte;
 	}
+
+	@Override
+	public double recupererSolde(int idCompte) {
+		// TODO Auto-generated method stub
+		Compte compte;
+		compte = em.find(Compte.class,idCompte);
+		Double solde = compte.getSolde();
+		return solde;
+	}
+
+	@Override
+	public void modifierSolde(int idCompte, double montant) {
+		// TODO Auto-generated method stub
+		Double nouveauSolde = recupererSolde(idCompte) + montant;
+		em.merge(nouveauSolde);
+	}
+	
+	
 	
 }
