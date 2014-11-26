@@ -43,7 +43,7 @@ public class Accueil extends HttpServlet {
 		Client client = new Client();
 		client.setLogin(gestionClient.getLogin());
 
-		request.setAttribute("client", client);
+		request.setAttribute("login", client.getLogin());
 		ArrayList<Compte> listeCompte = gestionCompte.recupererCompteClient(gestionClient.getId());
 
 		request.setAttribute("listeCompte", listeCompte);

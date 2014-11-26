@@ -6,7 +6,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import entities.Historique;
+import entities.Mouvement;
 
 /**
  * Session Bean implementation class GestionHistorique
@@ -26,14 +26,14 @@ public class GestionHistorique implements GestionHistoriqueRemote, GestionHistor
     }
 
 	@Override
-	public Historique ajouterHistorique(Historique historique) {
+	public Mouvement ajouterHistorique(Mouvement historique) {
 		em.persist(historique);
 		return historique;
 	}
 
 	@Override
-	public void supprimerHistorique(Historique historique) {
-		historique = em.find(Historique.class, historique.getId());
+	public void supprimerHistorique(Mouvement historique) {
+		historique = em.find(Mouvement.class, historique.getId());
 		em.remove(historique);
 	}
 

@@ -1,6 +1,9 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.*;
 
 /**
@@ -14,7 +17,9 @@ public class Compte implements Serializable {
 	@GeneratedValue
 	int id;
 	private double solde;
-	private Historique historique;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE }, mappedBy = "compte")
+	private List<Mouvement> historiqueMouvements = new ArrayList<Mouvement>();
 	
 	@ManyToOne
 	Client client;
@@ -41,20 +46,20 @@ public class Compte implements Serializable {
 		this.solde = solde;
 	}
 
-	public Historique getHistorique() {
-		return historique;
-	}
-
-	public void setHistorique(Historique historique) {
-		this.historique = historique;
-	}
-
 	public Client getClient() {
 		return client;
 	}
 
 	public void setClient(Client client) {
 		this.client = client;
+	}
+
+	public List<Mouvement> getHistoriqueMouvements() {
+		return historiqueMouvements;
+	}
+
+	public void setHistoriqueMouvements(List<Mouvement> historiqueMouvements) {
+		this.historiqueMouvements = historiqueMouvements;
 	}
 
 }

@@ -3,11 +3,11 @@ package beans;
 
 import javax.ejb.Remote;
 
-import entities.Historique;
+import entities.Mouvement;
 
 @Remote
 public interface GestionHistoriqueRemote {
-	public Historique ajouterHistorique (Historique historique);
-	public void supprimerHistorique (Historique historique);
+	public Mouvement ajouterHistorique (Mouvement historique);
+	public void supprimerHistorique (Mouvement historique);
 
 }

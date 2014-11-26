@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -9,28 +10,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import entities.Client;
-import entities.Compte;
-import entities.CompteEpargne;
-import entities.ComptePlatine;
-import entities.CompteStandard;
 import beans.GestionClientsRemote;
-import beans.GestionCompte;
 import beans.GestionCompteRemote;
+import entities.Compte;
 
 /**
- * Servlet implementation class NouveauCompte
+ * Servlet implementation class Operation
  */
-@WebServlet("/nouveaucompte")
-public class NouveauCompte extends HttpServlet {
+@WebServlet("/operation")
+public class Operation extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
-    @EJB(name="GestionCompteRemote")
-    GestionCompteRemote gestionCompteBean;
+	@EJB(name = "GestionCompte")
+	GestionCompteRemote gestionCompte;
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public NouveauCompte() {
+    public Operation() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -39,23 +34,13 @@ public class NouveauCompte extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		GestionClientsRemote gestionClient = (GestionClientsRemote) request.getSession().getAttribute("gestionClientsBean");
-		Client client = new Client();
-		client = gestionClient.getClientById(gestionClient.getId());
-		Compte compte = null;
-		String typeDeCompte = (String) request.getParameter("type");
-		if ("simple".equals(typeDeCompte)){
-			compte = new CompteStandard();		
-		}else if ("premium".equals(typeDeCompte)) {
-			compte = new ComptePlatine();
-		}else if("epargne".equals(typeDeCompte)){
-			compte = new CompteEpargne(); 
-		}
-		compte.setClient(client);
-		gestionCompteBean.ajouterCompte(compte);
-		
-		this.getServletContext().getRequestDispatcher("/accueil").forward(request, response);
 
+		GestionClientsRemote gestionClient = (GestionClientsRemote) request.getSession().getAttribute("gestionClientsBean");
+
+		ArrayList<Compte> listeCompte = gestionCompte.recupererCompteClient(gestionClient.getId());
+		request.setAttribute("listeCompte", listeCompte);
+		
+		this.getServletContext().getRequestDispatcher("/WEB-INF/operation").forward(request, response);
 	}
 
 	/**

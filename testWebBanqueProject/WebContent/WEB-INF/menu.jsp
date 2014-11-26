@@ -29,7 +29,7 @@
 						class="sr-only">(current)</span></a></li>
 				<li><a href="comptes?choix=0">Consulter Mes comptes</a></li>
 				<li class="dropdown">
-				<li><a href="operations">Effectuer une opération</a></li>
+				<li><a href="operation">Effectuer une opération</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="#">Link</a></li>
