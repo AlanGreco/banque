@@ -1,5 +1,6 @@
 package beans;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +45,13 @@ public class GestionCompte implements GestionCompteRemote, GestionCompteLocal {
 		String request = "Select c from Compte c Where client_id = '"+id+"'";
 		ArrayList<Compte> listCompte = (ArrayList<Compte>) em.createQuery(request).getResultList();
 		return listCompte;
+	}
+
+	@Override
+	public Compte getCompteById(int idCompte) {
+		Compte compte;
+		compte = em.find(Compte.class,idCompte);
+		return compte;
 	}
 	
 }

@@ -1,5 +1,6 @@
 package beans;
 
+
 import javax.ejb.Remote;
 
 

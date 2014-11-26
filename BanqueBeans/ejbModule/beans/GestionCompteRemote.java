@@ -8,7 +8,10 @@ import entities.Compte;
 
 @Remote
 public interface GestionCompteRemote {
-public Compte ajouterCompte (Compte compte);
-public void supprimerCompte (Compte compte);
-public ArrayList<Compte> recupererCompteClient (int id); 
+	public Compte ajouterCompte(Compte compte);
+
+	public void supprimerCompte(Compte compte);
+
+	public ArrayList<Compte> recupererCompteClient(int id);
+	public Compte getCompteById (int idCompte);
 }

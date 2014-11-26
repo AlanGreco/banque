@@ -37,19 +37,9 @@ public class Accueil extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-	
-	}
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		GestionClientsRemote gestionClient = (GestionClientsRemote) request
-				.getSession().getAttribute("gestionClientsBean");
+		GestionClientsRemote gestionClient = (GestionClientsRemote) request.getSession().getAttribute("gestionClientsBean");
 		Client client = new Client();
 		client.setLogin(gestionClient.getLogin());
 
@@ -57,8 +47,26 @@ public class Accueil extends HttpServlet {
 		ArrayList<Compte> listeCompte = gestionCompte.recupererCompteClient(gestionClient.getId());
 
 		request.setAttribute("listeCompte", listeCompte);
-		
-		this.getServletContext().getRequestDispatcher("/WEB-INF/accueil.jsp")
-				.forward(request, response);		}
+
+		this.getServletContext().getRequestDispatcher("/WEB-INF/accueil.jsp").forward(request, response);
+
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		GestionClientsRemote gestionClient = (GestionClientsRemote) request.getSession().getAttribute("gestionClientsBean");
+		Client client = new Client();
+		client.setLogin(gestionClient.getLogin());
+
+		request.setAttribute("client", client);
+		ArrayList<Compte> listeCompte = gestionCompte.recupererCompteClient(gestionClient.getId());
+
+		request.setAttribute("listeCompte", listeCompte);
+
+		this.getServletContext().getRequestDispatcher("/WEB-INF/accueil.jsp").forward(request, response);
+	}
 
 }

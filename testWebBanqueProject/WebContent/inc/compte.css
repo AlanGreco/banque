@@ -1,0 +1,14 @@
+.h1{
+	color: #26ADE4;
+}
+.container{
+	margin-left: 10px;
+	margin-right: 10px;
+	}
+	
+td{
+	width: 80px;
+}
+tr{
+	height: 25px;
+}

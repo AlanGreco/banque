@@ -10,8 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import beans.GestionClientsRemote;
-import beans.GestionCompteRemote;
+import beans.*;
 import entities.Client;
 import entities.Compte;
 
@@ -37,6 +36,7 @@ public class Comptes extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		if(request.getParameter("choix").equals("0")){
 		GestionClientsRemote gestionClient = (GestionClientsRemote) request.getSession().getAttribute("gestionClientsBean");
 		Client client = new Client();
 		client.setLogin(gestionClient.getLogin());
@@ -46,8 +46,15 @@ public class Comptes extends HttpServlet {
 
 		request.setAttribute("listeCompte", listeCompte);
 		
-		this.getServletContext().getRequestDispatcher("/WEB-INF/detailComptes.jsp")
-				.forward(request, response);
+		this.getServletContext().getRequestDispatcher("/WEB-INF/selectionCompte.jsp").forward(request, response);
+		}
+
+		
+		if(request.getParameter("choix").equals("1")){
+			Compte comte = gestionCompte.getCompteById(Integer.parseInt(request.getParameter("selectedCompte")));
+			request.setAttribute("compteSelectionne", comte);
+			this.getServletContext().getRequestDispatcher("/WEB-INF/detailsCompte.jsp").forward(request, response);	
+		}
 	
 	}
 
