@@ -32,7 +32,7 @@
 				<li><a href="operation">Effectuer une opération</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="#">Link</a></li>
+				<li><a href="#">Bienvenue : <%= request.getSession().getAttribute("loginClient") %></a></li>
 			</ul>
 
 		</div>

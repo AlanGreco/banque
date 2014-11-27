@@ -1,9 +1,11 @@
-.h1{
+h1{
 	color: #26ADE4;
+	text-align: center;
 }
 .container{
 	margin-left: 10px;
 	margin-right: 10px;
+	text-align: center;
 	}
 	
 td{

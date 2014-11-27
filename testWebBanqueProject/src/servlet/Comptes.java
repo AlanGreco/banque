@@ -5,13 +5,13 @@ import java.util.ArrayList;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
-import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import beans.*;
+import beans.GestionClientsRemote;
+import beans.GestionCompteRemote;
 import entities.Client;
 import entities.Compte;
 
@@ -51,7 +51,7 @@ public class Comptes extends HttpServlet {
 
 		
 		if(request.getParameter("choix").equals("1")){
-			Compte comte = gestionCompte.getCompteById(Integer.parseInt(request.getParameter("selectedCompte")));
+			Compte comte = gestionCompte.getCompteById(Integer.parseInt(request.getParameter("selectedCompte")));	
 			request.setAttribute("compteSelectionne", comte);
 			this.getServletContext().getRequestDispatcher("/WEB-INF/detailsCompte.jsp").forward(request, response);	
 		}

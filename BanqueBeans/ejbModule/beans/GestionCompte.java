@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import entities.Client;
 import entities.Compte;
 import entities.Mouvement;
 
@@ -19,6 +19,8 @@ import entities.Mouvement;
 @Stateless
 public class GestionCompte implements GestionCompteRemote, GestionCompteLocal {
 
+	@EJB(name="GestionHistoriqueRemote")
+	GestionHistorique gestionHistorique;
     /**
      * Default constructor. 
      */
@@ -53,6 +55,7 @@ public class GestionCompte implements GestionCompteRemote, GestionCompteLocal {
 	public Compte getCompteById(int idCompte) {
 		Compte compte;
 		compte = em.find(Compte.class,idCompte);
+		compte.getHistoriqueMouvements().size();
 		return compte;
 	}
 
@@ -63,10 +66,13 @@ public class GestionCompte implements GestionCompteRemote, GestionCompteLocal {
 		Double nouveauSolde = compte.getSolde() + montant;
 		Date date = new Date();
 		List<Mouvement> histo = compte.getHistoriqueMouvements();
-		histo.add(new Mouvement(montant, date));
+		Mouvement mouvement = new Mouvement(montant, date);
+		mouvement.setCompte(compte);
 		compte.setSolde(nouveauSolde);
 		compte.setHistoriqueMouvements(histo);
 		em.merge(compte);
+		
+		gestionHistorique.ajouterHistorique(mouvement);
 	}
 	
 	

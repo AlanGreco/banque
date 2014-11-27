@@ -11,11 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import beans.GestionClientsRemote;
-import beans.GestionCompte;
 import beans.GestionCompteRemote;
 import beans.GestionHistoriqueRemote;
 import entities.Compte;
-import entities.Mouvement;
 
 /**
  * Servlet implementation class Operation

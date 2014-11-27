@@ -6,11 +6,11 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Opération</title>
 </head>
 <body>
 	<%@include file="menu.jsp"%>
-
+<div style="text-align: center; width: 80%;">
 <form action="operation" method="post">
 	<input type="hidden" name ="choix" value="1">
 	<select name="selectedCompte">
@@ -26,6 +26,6 @@
 	<input type="number" step="0.1" name= "montant"  >
 	<input type="submit" value="Valider l'opération">
 	</form>
-
+</div>
 </body>
 </html>

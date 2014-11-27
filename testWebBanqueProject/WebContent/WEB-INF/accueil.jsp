@@ -17,8 +17,6 @@
 <%@include file="menu.jsp" %>
 
 </br>
-	Bienvenue dans votre espace personel :
-	<%=request.getAttribute("login")%>
 
 		<form action="nouveaucompte" method="get" class="formAjouterCompte">
 	<button type="submit" value="simple" name="type" class="btn btn-default btn-lg">

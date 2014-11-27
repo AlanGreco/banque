@@ -9,14 +9,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import beans.GestionClientsRemote;
+import beans.GestionCompteRemote;
 import entities.Client;
 import entities.Compte;
 import entities.CompteEpargne;
 import entities.ComptePlatine;
 import entities.CompteStandard;
-import beans.GestionClientsRemote;
-import beans.GestionCompte;
-import beans.GestionCompteRemote;
 
 /**
  * Servlet implementation class NouveauCompte

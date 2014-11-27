@@ -1,8 +1,6 @@
 package servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -11,8 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import entities.Client;
-import entities.Compte;
 import beans.GestionClientsRemote;
 import beans.GestionCompteRemote;
 
@@ -41,8 +37,7 @@ public class Login extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp")
-		.forward(request, response);
+		this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
 }
 
 	/**
@@ -59,12 +54,12 @@ public class Login extends HttpServlet {
 			
 			gestionclient.setLogin(login);
 			request.getSession().setAttribute("gestionClientsBean", gestionclient);
+			request.getSession().setAttribute("loginClient", gestionclient.getLogin());
 
-			this.getServletContext().getRequestDispatcher("/accueil")
-			.forward(request, response);
+
+			this.getServletContext().getRequestDispatcher("/accueil").forward(request, response);
 		}else{
-			this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp")
-			.forward(request, response);
+			this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
 		}
 	}
 

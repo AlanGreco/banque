@@ -13,9 +13,9 @@
 </head>
 <body>
 	<%@include file="menu.jsp"%>
-
-	<h1>Veuillez sélectionner un compte</h1>
 	<div class="container">
+	<h1 style="color:##26ADE4;">Veuillez sélectionner un compte</h1>
+
 	<form action="comptes" method="get">
 	<input type="hidden" name ="choix" value="1">
 	<select name="selectedCompte">
