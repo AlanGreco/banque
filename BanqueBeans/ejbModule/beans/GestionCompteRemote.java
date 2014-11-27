@@ -14,6 +14,5 @@ public interface GestionCompteRemote {
 
 	public ArrayList<Compte> recupererCompteClient(int id);
 	public Compte getCompteById (int idCompte);
-	public double recupererSolde (int idCompte);
 	public void modifierSolde (int idCompte, double montant);
 }

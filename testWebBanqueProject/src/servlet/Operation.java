@@ -55,10 +55,13 @@ public class Operation extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 
-		int id = Integer.parseInt(request.getParameter("choix"));	
+		int id = Integer.parseInt(request.getParameter("selectedCompte"));	
 		Double montant = Double.parseDouble(request.getParameter("montant"));
 		gestionCompte.modifierSolde(id, montant);
-		this.getServletContext().getRequestDispatcher("/WEB-INF/detailsCompte.jsp").forward(request, response);
+		request.setAttribute("choix", "1");
+		this.getServletContext().getRequestDispatcher("/comptes").forward(request, response);
+
+
 		//ArrayList<Mouvement> listeMouvement = gestionMouvement.ajouterHistorique(historique);
 		
 		
