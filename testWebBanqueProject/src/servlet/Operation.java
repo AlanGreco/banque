@@ -58,6 +58,7 @@ public class Operation extends HttpServlet {
 		int id = Integer.parseInt(request.getParameter("selectedCompte"));	
 		Double montant = Double.parseDouble(request.getParameter("montant"));
 		gestionCompte.modifierSolde(id, montant);
+
 		request.setAttribute("choix", "1");
 		this.getServletContext().getRequestDispatcher("/comptes").forward(request, response);
 

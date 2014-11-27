@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Connectin banque</title>
+<title>Connection banque</title>
 <link href="inc/contactform.css" rel="stylesheet" type="text/css" />
 
 </head>

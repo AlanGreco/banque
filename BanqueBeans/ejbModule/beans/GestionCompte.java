@@ -2,6 +2,7 @@ package beans;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -10,6 +11,7 @@ import javax.persistence.PersistenceContext;
 
 import entities.Client;
 import entities.Compte;
+import entities.Mouvement;
 
 /**
  * Session Bean implementation class GestionCompte
@@ -59,7 +61,11 @@ public class GestionCompte implements GestionCompteRemote, GestionCompteLocal {
 		// TODO Auto-generated method stub
 		Compte compte = getCompteById(idCompte);
 		Double nouveauSolde = compte.getSolde() + montant;
+		Date date = new Date();
+		List<Mouvement> histo = compte.getHistoriqueMouvements();
+		histo.add(new Mouvement(montant, date));
 		compte.setSolde(nouveauSolde);
+		compte.setHistoriqueMouvements(histo);
 		em.merge(compte);
 	}
 	

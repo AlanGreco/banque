@@ -29,6 +29,13 @@ public class Mouvement implements Serializable {
 	public Mouvement() {
 		super();
 	}
+	
+	public Mouvement(double montant, Date date) {
+		super();
+		this.montant = montant;
+		this.date = date;
+		
+	}
 
 	public int getId() {
 		return id;
