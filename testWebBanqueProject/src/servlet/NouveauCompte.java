@@ -44,11 +44,15 @@ public class NouveauCompte extends HttpServlet {
 		Compte compte = null;
 		String typeDeCompte = (String) request.getParameter("type");
 		if ("simple".equals(typeDeCompte)){
-			compte = new CompteStandard();		
+			compte = new CompteStandard();
+			((CompteStandard) compte).setPenalite(20);
 		}else if ("premium".equals(typeDeCompte)) {
 			compte = new ComptePlatine();
+			((ComptePlatine) compte).setDecouvertAutorise(500);
+			((ComptePlatine) compte).setPenalite(10);
 		}else if("epargne".equals(typeDeCompte)){
-			compte = new CompteEpargne(); 
+			compte = new CompteEpargne();
+			((CompteEpargne) compte).setTauxInteret (5);
 		}
 		compte.setClient(client);
 		gestionCompteBean.ajouterCompte(compte);
