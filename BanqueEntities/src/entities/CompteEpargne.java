@@ -14,7 +14,8 @@ public class CompteEpargne extends Compte implements Serializable {
 
 	private int tauxInteret ;
 	private static final long serialVersionUID = 1L;
-
+	private double compteInteret;
+	
 	public CompteEpargne() {
 		super();
 	}
@@ -25,6 +26,14 @@ public class CompteEpargne extends Compte implements Serializable {
 
 	public void setTauxInteret(int tauxInteret) {
 		this.tauxInteret = tauxInteret;
+	}
+
+	public double getCompteInteret() {
+		return compteInteret;
+	}
+
+	public void setCompteInteret(double compteInteret) {
+		this.compteInteret = compteInteret;
 	}
 
 }

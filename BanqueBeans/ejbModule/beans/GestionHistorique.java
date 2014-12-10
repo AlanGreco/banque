@@ -1,11 +1,14 @@
 package beans;
 
 
+import java.util.Date;
+
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import entities.Compte;
 import entities.Mouvement;
 
 /**
@@ -37,4 +40,19 @@ public class GestionHistorique implements GestionHistoriqueRemote, GestionHistor
 		em.remove(historique);
 	}
 
+	@Override
+	public void ajouterMouvement(double montant, Compte compte) {
+		Date today = new Date();
+		Mouvement mouvement = new Mouvement(montant, today);
+		mouvement.setCompte(compte);
+		em.persist(mouvement);
+	}
+	@Override
+	public void ajouterMouvement(double montant, Compte compte, String commentaire) {
+		Date today = new Date();
+		Mouvement mouvement = new Mouvement(montant, today);
+		mouvement.setCommentaire(commentaire);
+		mouvement.setCompte(compte);
+		em.persist(mouvement);
+	}
 }

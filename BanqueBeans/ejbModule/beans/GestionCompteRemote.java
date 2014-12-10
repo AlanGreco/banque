@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.ejb.Remote;
 
 import entities.Compte;
+import entities.CompteEpargne;
 
 @Remote
 public interface GestionCompteRemote {
@@ -15,4 +16,9 @@ public interface GestionCompteRemote {
 	public ArrayList<Compte> recupererCompteClient(int id);
 	public Compte getCompteById (int idCompte);
 	public boolean modifierSolde (int idCompte, double montant);
+	public CompteEpargne  calculInteretEpargne(double mouvement, CompteEpargne compte);
+	public void crediterLesInterets();
+
+	void supprimerCompte(int idCompte);
+
 }

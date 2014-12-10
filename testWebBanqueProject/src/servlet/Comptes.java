@@ -36,6 +36,10 @@ public class Comptes extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if (request.getSession().getAttribute("gestionClientsBean") == null){
+			this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+			return;
+		}
 		if(request.getParameter("choix").equals("0")){
 		GestionClientsRemote gestionClient = (GestionClientsRemote) request.getSession().getAttribute("gestionClientsBean");
 		Client client = new Client();
@@ -50,12 +54,15 @@ public class Comptes extends HttpServlet {
 		}
 
 		
-		if(request.getParameter("choix").equals("1")){
+		else if(request.getParameter("choix").equals("1")){
 			Compte comte = gestionCompte.getCompteById(Integer.parseInt(request.getParameter("selectedCompte")));	
 			request.setAttribute("compteSelectionne", comte);
 			this.getServletContext().getRequestDispatcher("/WEB-INF/detailsCompte.jsp").forward(request, response);	
+		}else if (request.getParameter("choix").equals("2")) {
+			gestionCompte.supprimerCompte(Integer.parseInt(request.getParameter("compteID")));
+			this.getServletContext().getRequestDispatcher("/accueil").forward(request, response);
+
 		}
-	
 	}
 
 	/**

@@ -34,11 +34,13 @@ public class NouveauClient extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if (request.getSession().getAttribute("gestionClientsBean") == null){
+			this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+			return;
+		}
 		response.setContentType("text/html");
 		response.setCharacterEncoding("UTF-8");
-
 
 		this.getServletContext().getRequestDispatcher("/WEB-INF/nouveauClient.jsp")
 				.forward(request, response);
@@ -55,11 +57,11 @@ public class NouveauClient extends HttpServlet {
 		c.setNom(request.getParameter("prenomClient"));
 		c.setPrenom(request.getParameter("nomClient"));
 		c.setPassword(request.getParameter("motDePasseClient"));
-		c.setLogin(c.getPrenom()+"."+c.getNom());
+		c.setLogin(c.getPrenom() + "." + c.getNom());
 
 		c = gestionclient.ajouterClient(c);
 		this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp")
-		.forward(request, response);
+				.forward(request, response);
 	}
 
 }

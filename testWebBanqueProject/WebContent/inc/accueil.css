@@ -4,6 +4,8 @@
 	border-radius: 5px;
 	padding: 10px;
 	width: 300px;
+	display: inline-block;
+	vertical-align: middle;
 }
 
 .formAjouterCompte {
@@ -12,4 +14,10 @@
 	width: 900px;
 	text-align: center;
 	margin-right: auto;
+}
+.glyphicon{
+	color:#26ADE4;
+}
+.compteBlock{
+
 }

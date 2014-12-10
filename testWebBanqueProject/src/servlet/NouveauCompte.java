@@ -23,46 +23,53 @@ import entities.CompteStandard;
 @WebServlet("/nouveaucompte")
 public class NouveauCompte extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
-    @EJB(name="GestionCompteRemote")
-    GestionCompteRemote gestionCompteBean;
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public NouveauCompte() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+
+	@EJB(name = "GestionCompteRemote")
+	GestionCompteRemote gestionCompteBean;
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public NouveauCompte() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if (request.getSession().getAttribute("gestionClientsBean") == null) {
+			this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+			return;
+		}
 		GestionClientsRemote gestionClient = (GestionClientsRemote) request.getSession().getAttribute("gestionClientsBean");
 		Client client = new Client();
 		client = gestionClient.getClientById(gestionClient.getId());
 		Compte compte = null;
 		String typeDeCompte = (String) request.getParameter("type");
-		if ("simple".equals(typeDeCompte)){
+		if ("simple".equals(typeDeCompte)) {
 			compte = new CompteStandard();
 			((CompteStandard) compte).setPenalite(20);
-		}else if ("premium".equals(typeDeCompte)) {
+		} else if ("premium".equals(typeDeCompte)) {
 			compte = new ComptePlatine();
 			((ComptePlatine) compte).setDecouvertAutorise(500);
 			((ComptePlatine) compte).setPenalite(10);
-		}else if("epargne".equals(typeDeCompte)){
+		} else if ("epargne".equals(typeDeCompte)) {
 			compte = new CompteEpargne();
-			((CompteEpargne) compte).setTauxInteret (5);
+			((CompteEpargne) compte).setTauxInteret(5);
 		}
 		compte.setClient(client);
 		gestionCompteBean.ajouterCompte(compte);
-		
+
 		this.getServletContext().getRequestDispatcher("/accueil").forward(request, response);
 
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub

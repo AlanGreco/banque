@@ -43,6 +43,7 @@ public class Compte implements Serializable {
 	}
 
 	public void setSolde(double solde) {
+		solde = (double)Math.round(solde*100)/100;
 		this.solde = solde;
 	}
 
@@ -60,6 +61,10 @@ public class Compte implements Serializable {
 
 	public void setHistoriqueMouvements(List<Mouvement> historiqueMouvements) {
 		this.historiqueMouvements = historiqueMouvements;
+	}
+	public void effecteurOperation(double montant){
+		montant = Math.round(montant*100)/100;
+		solde += montant;
 	}
 
 }

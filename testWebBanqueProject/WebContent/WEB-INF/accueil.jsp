@@ -1,8 +1,7 @@
-<%@page import="entities.Compte"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="entities.Client"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -14,34 +13,36 @@
 <title>Accueil Banque</title>
 </head>
 <body>
-<%@include file="menu.jsp" %>
+	<%@include file="menu.jsp"%>
 
-</br>
+	</br>
 
-		<form action="nouveaucompte" method="get" class="formAjouterCompte">
-	<button type="submit" value="simple" name="type" class="btn btn-default btn-lg">
-		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-		Ajouter un compte Simple
-	</button>
+	<form action="nouveaucompte" method="get" class="formAjouterCompte">
+		<button type="submit" value="simple" name="type" class="btn btn-default btn-lg">
+			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter un compte Simple
+		</button>
 
-	<button type="submit" value="premium"  name="type" class="btn btn-default btn-lg">
-		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-		Ajouter un compte Premium
-	</button>
-	</button>
-	<button type="submit" value="epargne" name="type" class="btn btn-default btn-lg">
-		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-		Ajouter un compte Epargne
-	</button>
+		<button type="submit" value="premium" name="type" class="btn btn-default btn-lg">
+			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter un compte Premium
+		</button>
+		<button type="submit" value="epargne" name="type" class="btn btn-default btn-lg">
+			<span class="glyphicon glyphicon-plus" aria-hidden="true""></span> Ajouter un compte Epargne
+		</button>
 	</form>
-	
-<% ArrayList<Compte> listeCompte = (ArrayList<Compte>) request.getAttribute("listeCompte");
-				for (int i=0; i<listeCompte.size(); i++)
-				{
-					out.println("<div class=\"compte\">"+listeCompte.get(i).getClass().getName().substring(9));
-					out.println (  "     Solde : "+listeCompte.get(i).getSolde()+"</div>");				
-				}
-				%>
-
+	<form action="comptes" method="get">
+	<input type="hidden" value="2" name="choix" />
+	<c:forEach var="compte" items="${listeCompte}">
+		<div class="compteBlock">
+		<div class="compte">
+			<c:set var="classe" value=" ${ compte.class.name}" />
+			<c:out value="${fn:substringAfter(classe, 'entities.'  )  }" />
+			<c:out value="Solde :     ${compte.solde}"></c:out>
+		</div>
+		<button type="submit" value="${compte.id}" name="compteID" class="btn btn-default btn-lg">
+			<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+		</button>
+		</div>
+	</c:forEach>
+	</form>
 </body>
 </html>

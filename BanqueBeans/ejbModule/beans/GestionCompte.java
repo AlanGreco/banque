@@ -4,12 +4,23 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
+import javax.ejb.Schedule;
 import javax.ejb.Stateless;
+import javax.enterprise.event.Observes;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.UniqueConstraint;
+
+import org.jboss.logging.LogMessage;
+import org.jboss.logging.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.Instant;
+import org.joda.time.Interval;
 
 import entities.Compte;
+import entities.CompteEpargne;
 import entities.ComptePlatine;
 import entities.CompteStandard;
 import entities.Mouvement;
@@ -21,7 +32,10 @@ import entities.Mouvement;
 public class GestionCompte implements GestionCompteRemote, GestionCompteLocal {
 
 	@EJB(name = "GestionHistoriqueRemote")
+	// @EJB(lookup="java:global/BanqueEar/BanqueBeans/GestionHistorique!beans.GestionHistoriqueRemote")
 	GestionHistorique gestionHistorique;
+
+	private static final Logger log = Logger.getLogger(GestionCompte.class.getName());
 
 	/**
 	 * Default constructor.
@@ -44,11 +58,18 @@ public class GestionCompte implements GestionCompteRemote, GestionCompteLocal {
 		compte = em.find(Compte.class, compte.getId());
 		em.remove(compte);
 	}
+	
+	@Override
+	public void supprimerCompte(int idCompte) {
+		Compte compte = em.find(Compte.class, idCompte);
+		em.remove(compte);
+	}
 
 	@Override
 	public ArrayList<Compte> recupererCompteClient(int id) {
 		// TODO Auto-generated method stub
 		String request = "Select c from Compte c Where client_id = '" + id + "'";
+		@SuppressWarnings("unchecked")
 		ArrayList<Compte> listCompte = (ArrayList<Compte>) em.createQuery(request).getResultList();
 		return listCompte;
 	}
@@ -63,53 +84,81 @@ public class GestionCompte implements GestionCompteRemote, GestionCompteLocal {
 
 	@Override
 	public boolean modifierSolde(int idCompte, double montant) {
-		// TODO Auto-generated method stub
 		Compte compte = getCompteById(idCompte);
-		Date date = new Date();
 		List<Mouvement> histo = compte.getHistoriqueMouvements();
-		Mouvement mouvement = new Mouvement(montant, date);
-		Mouvement penalite = new Mouvement(montant, date);
-		mouvement.setCompte(compte);
-		penalite.setCompte(compte);
-		Double nouveauSolde = compte.getSolde() + montant;
+		Double nouveauSolde = (double) compte.getSolde() + montant;
+
 		if (nouveauSolde >= 0 || montant >= 0) {
+			if (compte instanceof CompteEpargne) {
+				calculInteretEpargne(montant, (CompteEpargne) compte);
+			}
 			compte.setSolde(nouveauSolde);
 			compte.setHistoriqueMouvements(histo);
-
-			gestionHistorique.ajouterHistorique(mouvement);
+			gestionHistorique.ajouterMouvement(montant, compte, "Crédit");
 		} else {
-			String typeCompte = compte.getClass().getName().substring(9);
-			if (typeCompte.equals("CompteStandard")) {
-				Double nouveauSoldePenalise = nouveauSolde - ((CompteStandard) compte).getPenalite();
+			
+			if (compte instanceof CompteStandard) {
+				Double nouveauSoldePenalise = (double) nouveauSolde - ((CompteStandard) compte).getPenalite();
 				compte.setSolde(nouveauSoldePenalise);
 				compte.setHistoriqueMouvements(histo);
-
-				gestionHistorique.ajouterHistorique(mouvement);
-				penalite.setMontant(-((CompteStandard) compte).getPenalite());
+				gestionHistorique.ajouterMouvement(-((CompteStandard) compte).getPenalite(), compte, "Pénalité");
+			} else if (compte instanceof ComptePlatine) {
 				
-				gestionHistorique.ajouterHistorique(penalite);
-			} else if (typeCompte.equals("ComptePlatine")) {
 				if (nouveauSolde >= -((ComptePlatine) compte).getDecouvertAutorise()) {
 					compte.setSolde(nouveauSolde);
 					compte.setHistoriqueMouvements(histo);
-
-					gestionHistorique.ajouterHistorique(mouvement);
 				} else {
 					Double nouveauSoldePenalise = nouveauSolde - ((ComptePlatine) compte).getPenalite();
 					compte.setSolde(nouveauSoldePenalise);
 					compte.setHistoriqueMouvements(histo);
-
-					gestionHistorique.ajouterHistorique(mouvement);
-					penalite.setMontant(-((ComptePlatine) compte).getPenalite());
-					gestionHistorique.ajouterHistorique(penalite);
+					gestionHistorique.ajouterMouvement(-((ComptePlatine) compte).getPenalite(), compte, "Pénalité");
 				}
+				
 			} else {
 				return false;
-
 			}
+			gestionHistorique.ajouterMouvement(montant, compte, "Débit");
+
 		}
 		em.merge(compte);
 		return true;
 	}
 
+	public CompteEpargne calculInteretEpargne(double mouvement, CompteEpargne compte) {
+		double interet;
+
+		Instant now = Instant.now();
+		DateTime dt = now.toDateTime();
+		int anneeActuelle = Integer.parseInt(dt.year().getAsText());
+		Instant finAnnee = new DateTime(anneeActuelle, 12, 31, 0, 0, 0, 0).toInstant();
+
+		org.joda.time.Duration duree = new Interval(now, finAnnee).toDuration();
+		int intervalEnJour = duree.toStandardDays().getDays();
+
+		double tauxDinteret = (double) compte.getTauxInteret() / 100;
+		interet = (double) mouvement * tauxDinteret * intervalEnJour / 365;
+		interet = (double) Math.round(interet * 100) / 100;
+
+		compte.setCompteInteret(interet);
+		return compte;
+	}
+
+	public void crediterLesInterets() {
+
+		@SuppressWarnings("unchecked")
+		List<Compte> listCompte = em.createQuery("Select c from Compte c").getResultList();
+		double interet;
+		for (Compte compte : listCompte) {
+			if (compte instanceof CompteEpargne) {
+				interet = ((CompteEpargne) compte).getCompteInteret();
+				if (interet > 0) {
+					compte.effecteurOperation(interet);
+					((CompteEpargne) compte).setCompteInteret(0);
+					em.merge(compte);
+					gestionHistorique.ajouterMouvement(interet, compte, "Interêts créditeurs");
+				}
+			}
+		}
+		log.info("Crédit des intérets");
+	}
 }

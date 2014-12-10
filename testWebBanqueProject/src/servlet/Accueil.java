@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import beans.GestionClientsRemote;
 import beans.GestionCompteRemote;
@@ -38,7 +39,11 @@ public class Accueil extends HttpServlet {
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		if (request.getSession().getAttribute("gestionClientsBean") == null){
+			this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+			return;
+		}
+		
 		GestionClientsRemote gestionClient = (GestionClientsRemote) request.getSession().getAttribute("gestionClientsBean");
 		Client client = new Client();
 		client.setLogin(gestionClient.getLogin());

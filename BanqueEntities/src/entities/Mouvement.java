@@ -22,6 +22,7 @@ public class Mouvement implements Serializable {
 
 	private double montant;
 	private Date date;
+	private String commentaire = "Mouvement";
 	
 	@ManyToOne
 	Compte compte;
@@ -67,6 +68,14 @@ public class Mouvement implements Serializable {
 
 	public void setCompte(Compte compte) {
 		this.compte = compte;
+	}
+
+	public String getCommentaire() {
+		return commentaire;
+	}
+
+	public void setCommentaire(String commentaire) {
+		this.commentaire = commentaire;
 	}
 
 
