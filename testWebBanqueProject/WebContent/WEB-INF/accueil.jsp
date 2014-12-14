@@ -26,23 +26,26 @@
 			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter un compte Premium
 		</button>
 		<button type="submit" value="epargne" name="type" class="btn btn-default btn-lg">
-			<span class="glyphicon glyphicon-plus" aria-hidden="true""></span> Ajouter un compte Epargne
+			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter un compte Epargne
 		</button>
 	</form>
-	<form action="comptes" method="get">
-	<input type="hidden" value="2" name="choix" />
-	<c:forEach var="compte" items="${listeCompte}">
-		<div class="compteBlock">
-		<div class="compte">
-			<c:set var="classe" value=" ${ compte.class.name}" />
-			<c:out value="${fn:substringAfter(classe, 'entities.'  )  }" />
-			<c:out value="Solde :     ${compte.solde}"></c:out>
-		</div>
-		<button type="submit" value="${compte.id}" name="compteID" class="btn btn-default btn-lg">
-			<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-		</button>
-		</div>
-	</c:forEach>
+	<form id="detailsCompte" action="comptes" method="get">
+		<input type="hidden"  value="1" name="choix" />
+	</form>
+	<form id="suppressionCompte" action="comptes" method="get">
+		<input type="hidden" value="2" name="choix" />
+		<c:forEach var="compte" items="${listeCompte}">
+			<div class="compteBlock">
+				<button form="detailsCompte" type="submit" name="selectedCompte" value="${compte.id}" class="compte">
+					<c:set var="classe" value=" ${ compte.class.name}" />
+					<c:out value="${fn:substringAfter(classe, 'entities.'  )  }" />
+					<c:out value="Solde :     ${compte.solde}"></c:out>
+				</button>
+				<button type="submit" value="${compte.id}" name="compteID" class="btn btn-default btn-lg">
+					<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+				</button>
+			</div>
+		</c:forEach>
 	</form>
 </body>
 </html>

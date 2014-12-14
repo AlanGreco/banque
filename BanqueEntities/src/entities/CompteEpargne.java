@@ -36,4 +36,8 @@ public class CompteEpargne extends Compte implements Serializable {
 		this.compteInteret = compteInteret;
 	}
 
+	public void ajouterInteret(double interet) {
+		this.compteInteret += interet;		
+	}
+
 }

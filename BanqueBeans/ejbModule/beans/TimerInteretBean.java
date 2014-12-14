@@ -8,8 +8,6 @@ import javax.ejb.LocalBean;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.TimerService;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
 
 /**
  * Session Bean implementation class TimerInteretBean
@@ -30,10 +28,11 @@ public class TimerInteretBean {
 	public TimerInteretBean() {
 		// TODO Auto-generated constructor stub
 	}
-	@PostConstruct
+	
+	// Le versement des intêrets créditeur est effectué à interval régulier (normalement 1 fois par an) toutes les 10 minutes pour l'exemple
+	//@PostConstruct
 	@Schedule(minute = "*/10", hour = "*", persistent=false)
 	public void automaticTimeout() {
-//		System.out.println("Automatic timeout occured");
 		gestionComptes.crediterLesInterets();
 	}
 }

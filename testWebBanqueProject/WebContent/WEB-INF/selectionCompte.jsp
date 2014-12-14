@@ -14,19 +14,19 @@
 	<div class="container">
 		<h1 style="color: ##26ADE4;">Veuillez sélectionner un compte</h1>
 
-		<form action="comptes" method="get">
-			<input type="hidden" name="choix" value="1"/> 
-			<select name="selectedCompte">
-				<c:forEach var="compte" items="${listeCompte}">
-					<option value="${compte.id}">
-						<c:set var="classe" value=" ${ compte.class.name}" />
-						<c:out value="${fn:substringAfter(classe, 'entities.'  )  }" />
-					</option>
-				</c:forEach>
-			</select> 
-			<br> <br> 
-			<input type="submit" value="Selectionner compte" />
-		</form>
+
+	<form action="comptes" method="get">
+	<input type="hidden" value="1" name="choix" />
+	<c:forEach var="compte" items="${listeCompte}">
+		<div class="compteBlock">
+		<button type="submit"  name="selectedCompte" value="${compte.id}" class="compte">
+			<c:set var="classe" value=" ${ compte.class.name}" />
+			<c:out value="${fn:substringAfter(classe, 'entities.'  )  }" />
+		</button>
+		</div>
+	</c:forEach>
+	</form>
+	
 	</div>
 </body>
 </html>

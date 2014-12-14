@@ -21,4 +21,6 @@ public interface GestionCompteRemote {
 
 	void supprimerCompte(int idCompte);
 
+	public boolean effectuerVirement(int idCompte1, int idCompte2, Double iMontant);
+	public boolean verificationAppartenanceCompte (int idClient, int idCompte);
 }

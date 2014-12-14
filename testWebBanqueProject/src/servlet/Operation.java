@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.ejb.EJB;
+import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import util.util;
 import beans.GestionClientsRemote;
 import beans.GestionCompteRemote;
 import beans.GestionHistoriqueRemote;
@@ -59,17 +61,51 @@ public class Operation extends HttpServlet {
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 
-		int id = Integer.parseInt(request.getParameter("selectedCompte"));
-		Double montant = Double.parseDouble(request.getParameter("montant"));
-		gestionCompte.modifierSolde(id, montant);
+		if (request.getSession().getAttribute("gestionClientsBean") == null) {
+			this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+			return;
+		}
 
-		request.setAttribute("choix", "1");
-		this.getServletContext().getRequestDispatcher("/comptes").forward(request, response);
+		GestionClientsRemote gestionClient = (GestionClientsRemote) request.getSession().getAttribute("gestionClientsBean");
 
-		// ArrayList<Mouvement> listeMouvement =
-		// gestionMouvement.ajouterHistorique(historique);
+		String type = request.getParameter("type");
+		if ("operation".equals(type)) {
+			int id = Integer.parseInt(request.getParameter("selectedCompte"));
+			Double montant = Double.parseDouble(request.getParameter("montant"));
+			gestionCompte.modifierSolde(id, montant);
+
+			this.getServletContext().getRequestDispatcher("/comptes").forward(request, response);
+
+		} else if ("virement".equals(type)) {
+			String pMontant = request.getParameter("montant");
+			String pIdCompte1 = request.getParameter("selectedCompte");
+			String pIdCompte2 = request.getParameter("selectedCompte2");
+
+			boolean parsable = util.isParsableDouble(pMontant) && util.isParsableInt(pIdCompte1) && util.isParsableInt(pIdCompte2);
+
+			if (parsable) {
+				Double iMontant = Double.parseDouble(pMontant);
+				int idCompte1 = Integer.parseInt(pIdCompte1);
+				int idCompte2 = Integer.parseInt(pIdCompte2);
+
+				boolean authentifier = gestionCompte.verificationAppartenanceCompte(gestionClient.getId(), idCompte1);
+				authentifier &= gestionCompte.verificationAppartenanceCompte(gestionClient.getId(), idCompte2);
+
+				if (iMontant > 0 && authentifier) {
+					gestionCompte.effectuerVirement(idCompte1, idCompte2, iMontant);
+
+					
+					this.getServletContext().getRequestDispatcher("/comptes").forward(request, response);
+				} else {
+					doGet(request, response);
+				}
+
+			} else {
+				doGet(request, response);
+			}
+
+		}
 
 	}
 

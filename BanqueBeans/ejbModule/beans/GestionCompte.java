@@ -1,19 +1,13 @@
 package beans;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
-import javax.ejb.Schedule;
 import javax.ejb.Stateless;
-import javax.enterprise.event.Observes;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.UniqueConstraint;
 
-import org.jboss.logging.LogMessage;
 import org.jboss.logging.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.Instant;
@@ -27,6 +21,18 @@ import entities.Mouvement;
 
 /**
  * Session Bean implementation class GestionCompte
+ */
+/**
+ * @author leocorone
+ *
+ */
+/**
+ * @author leocorone
+ *
+ */
+/**
+ * @author leocorone
+ *
  */
 @Stateless
 public class GestionCompte implements GestionCompteRemote, GestionCompteLocal {
@@ -58,7 +64,7 @@ public class GestionCompte implements GestionCompteRemote, GestionCompteLocal {
 		compte = em.find(Compte.class, compte.getId());
 		em.remove(compte);
 	}
-	
+
 	@Override
 	public void supprimerCompte(int idCompte) {
 		Compte compte = em.find(Compte.class, idCompte);
@@ -82,10 +88,11 @@ public class GestionCompte implements GestionCompteRemote, GestionCompteLocal {
 		return compte;
 	}
 
+	// Méthode prenant en charge une opération sur un compte
 	@Override
 	public boolean modifierSolde(int idCompte, double montant) {
 		Compte compte = getCompteById(idCompte);
-		List<Mouvement> histo = compte.getHistoriqueMouvements();
+		// List<Mouvement> histo = compte.getHistoriqueMouvements();
 		Double nouveauSolde = (double) compte.getSolde() + montant;
 
 		if (nouveauSolde >= 0 || montant >= 0) {
@@ -93,27 +100,27 @@ public class GestionCompte implements GestionCompteRemote, GestionCompteLocal {
 				calculInteretEpargne(montant, (CompteEpargne) compte);
 			}
 			compte.setSolde(nouveauSolde);
-			compte.setHistoriqueMouvements(histo);
+			// compte.setHistoriqueMouvements(histo);
 			gestionHistorique.ajouterMouvement(montant, compte, "Crédit");
 		} else {
-			
+
 			if (compte instanceof CompteStandard) {
 				Double nouveauSoldePenalise = (double) nouveauSolde - ((CompteStandard) compte).getPenalite();
 				compte.setSolde(nouveauSoldePenalise);
-				compte.setHistoriqueMouvements(histo);
+				// compte.setHistoriqueMouvements(histo);
 				gestionHistorique.ajouterMouvement(-((CompteStandard) compte).getPenalite(), compte, "Pénalité");
 			} else if (compte instanceof ComptePlatine) {
-				
+
 				if (nouveauSolde >= -((ComptePlatine) compte).getDecouvertAutorise()) {
 					compte.setSolde(nouveauSolde);
-					compte.setHistoriqueMouvements(histo);
+					// compte.setHistoriqueMouvements(histo);
 				} else {
 					Double nouveauSoldePenalise = nouveauSolde - ((ComptePlatine) compte).getPenalite();
 					compte.setSolde(nouveauSoldePenalise);
-					compte.setHistoriqueMouvements(histo);
+					// compte.setHistoriqueMouvements(histo);
 					gestionHistorique.ajouterMouvement(-((ComptePlatine) compte).getPenalite(), compte, "Pénalité");
 				}
-				
+
 			} else {
 				return false;
 			}
@@ -124,6 +131,9 @@ public class GestionCompte implements GestionCompteRemote, GestionCompteLocal {
 		return true;
 	}
 
+	// Méthode permettant de calculer les interets sur un compte épargne. Cette
+	// méthode est appellée à chaque
+	// fois qu'une opération est effectuée sur un compte épargne.
 	public CompteEpargne calculInteretEpargne(double mouvement, CompteEpargne compte) {
 		double interet;
 
@@ -139,10 +149,11 @@ public class GestionCompte implements GestionCompteRemote, GestionCompteLocal {
 		interet = (double) mouvement * tauxDinteret * intervalEnJour / 365;
 		interet = (double) Math.round(interet * 100) / 100;
 
-		compte.setCompteInteret(interet);
+		compte.ajouterInteret(interet);
 		return compte;
 	}
 
+	// Methode permettant de créditer les intêrets sur tous les comptes épargnes
 	public void crediterLesInterets() {
 
 		@SuppressWarnings("unchecked")
@@ -160,5 +171,40 @@ public class GestionCompte implements GestionCompteRemote, GestionCompteLocal {
 			}
 		}
 		log.info("Crédit des intérets");
+	}
+
+	public boolean verificationAppartenanceCompte(int idClient, int idCompte) {
+		Compte compte = em.find(Compte.class, idCompte);
+		if (compte.getClient().getId() == idClient) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	// Methode permettant d'effectuer un virement d'un compte à un autre
+	@Override
+	public boolean effectuerVirement(int idCompte1, int idCompte2, Double iMontant) {
+		Compte compte1 = getCompteById(idCompte1);
+		Compte compte2 = getCompteById(idCompte2);
+
+		if (compte1.getSolde() >= iMontant) {
+			if(compte1 instanceof CompteEpargne){
+				calculInteretEpargne(-iMontant, (CompteEpargne) compte1);
+			}
+			compte1.effecteurOperation(-iMontant);
+			em.merge(compte1);
+			gestionHistorique.ajouterMouvement(-iMontant, compte1, "Virement");
+
+			if(compte2 instanceof CompteEpargne){
+				calculInteretEpargne(iMontant, (CompteEpargne) compte2);
+			}
+			compte2.effecteurOperation(iMontant);
+			em.merge(compte2);
+			gestionHistorique.ajouterMouvement(iMontant, compte2, "Virement");
+			return true;
+		}
+		return false;
+
 	}
 }

@@ -63,7 +63,7 @@ public class Compte implements Serializable {
 		this.historiqueMouvements = historiqueMouvements;
 	}
 	public void effecteurOperation(double montant){
-		montant = Math.round(montant*100)/100;
+		montant = (double) Math.round(montant*100)/100;
 		solde += montant;
 	}
 
