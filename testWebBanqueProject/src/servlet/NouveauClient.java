@@ -27,32 +27,20 @@ public class NouveauClient extends HttpServlet {
 	 */
 	public NouveauClient() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (request.getSession().getAttribute("gestionClientsBean") == null){
-			this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
-			return;
-		}
-		response.setContentType("text/html");
-		response.setCharacterEncoding("UTF-8");
-
-		this.getServletContext().getRequestDispatcher("/WEB-INF/nouveauClient.jsp")
-				.forward(request, response);
+		this.getServletContext().getRequestDispatcher("/WEB-INF/nouveauClient.jsp").forward(request, response);
 
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Client c = new Client();
 		c.setNom(request.getParameter("prenomClient"));
 		c.setPrenom(request.getParameter("nomClient"));
@@ -60,8 +48,7 @@ public class NouveauClient extends HttpServlet {
 		c.setLogin(c.getPrenom() + "." + c.getNom());
 
 		c = gestionclient.ajouterClient(c);
-		this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp")
-				.forward(request, response);
+		this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
 	}
 
 }

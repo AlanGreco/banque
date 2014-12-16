@@ -16,7 +16,7 @@
 
 				<div class="cfg-element-set" id="cfg-element-8-9-set">
 					<div class="cfg-element-content">
-						<span class="cfg-title " name="cfg-element-8-9" id="cfg-element-8-9">Connection</span>
+						<span class="cfg-title" name="cfg-element-8-9" id="cfg-element-8-9">Connection</span>
 					</div>
 				</div>
 			</div>
@@ -64,7 +64,6 @@
 			</form>
 			<a href="NouveauClient">Créer votre compte</a>
 		</div>
-		<!-- cfg-contactform-content -->
 
 	</div>
 

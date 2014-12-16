@@ -1,7 +1,7 @@
 package servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -30,7 +30,6 @@ public class Accueil extends HttpServlet {
 	 */
 	public Accueil() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -48,7 +47,7 @@ public class Accueil extends HttpServlet {
 		client.setLogin(gestionClient.getLogin());
 
 		request.setAttribute("login", client.getLogin());
-		ArrayList<Compte> listeCompte = gestionCompte.recupererCompteClient(gestionClient.getId());
+		List<Compte> listeCompte = gestionCompte.recupererCompteClient(gestionClient.getId());
 
 		request.setAttribute("listeCompte", listeCompte);
 
@@ -66,7 +65,7 @@ public class Accueil extends HttpServlet {
 		client.setLogin(gestionClient.getLogin());
 
 		request.setAttribute("client", client);
-		ArrayList<Compte> listeCompte = gestionCompte.recupererCompteClient(gestionClient.getId());
+		List<Compte> listeCompte = gestionCompte.recupererCompteClient(gestionClient.getId());
 
 		request.setAttribute("listeCompte", listeCompte);
 

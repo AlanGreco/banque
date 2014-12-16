@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import util.util;
 import beans.GestionClientsRemote;
 import beans.GestionCompteRemote;
 import entities.Client;
@@ -30,7 +31,6 @@ public class Comptes extends HttpServlet {
 	 */
 	public Comptes() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -42,7 +42,16 @@ public class Comptes extends HttpServlet {
 			this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
 			return;
 		}
-		if (request.getParameter("choix").equals("0")) {
+
+		String sChoix = request.getParameter("choix");
+		int choix = 10;
+
+		if (util.isParsableInt(sChoix)) {
+			choix = Integer.parseInt(sChoix);
+		}
+
+		switch (choix) {
+		case 0:
 			GestionClientsRemote gestionClient = (GestionClientsRemote) request.getSession().getAttribute("gestionClientsBean");
 			Client client = new Client();
 			client.setLogin(gestionClient.getLogin());
@@ -53,16 +62,22 @@ public class Comptes extends HttpServlet {
 			request.setAttribute("listeCompte", listeCompte);
 
 			this.getServletContext().getRequestDispatcher("/WEB-INF/selectionCompte.jsp").forward(request, response);
-		}
+			break;
 
-		else if (request.getParameter("choix").equals("1")) {
+		case 1:
 			Compte comte = gestionCompte.getCompteById(Integer.parseInt(request.getParameter("selectedCompte")));
 			request.setAttribute("compteSelectionne", comte);
 			this.getServletContext().getRequestDispatcher("/WEB-INF/detailsCompte.jsp").forward(request, response);
-			
-		} else if (request.getParameter("choix").equals("2")) {
+			break;
+
+		case 2:
 			gestionCompte.supprimerCompte(Integer.parseInt(request.getParameter("compteID")));
 			this.getServletContext().getRequestDispatcher("/accueil").forward(request, response);
+
+			break;
+		default:
+			this.getServletContext().getRequestDispatcher("/accueil").forward(request, response);
+			break;
 		}
 	}
 
@@ -71,10 +86,7 @@ public class Comptes extends HttpServlet {
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-
 		doGet(request, response);
-
 	}
 
 }

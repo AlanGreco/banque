@@ -18,27 +18,26 @@ import beans.GestionCompteRemote;
 @WebServlet("/login")
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
 	@EJB(name = "GestionClients")
 	GestionClientsRemote gestionclient;
-	
+
 	@EJB(name = "GestionCompte")
 	GestionCompteRemote gestionCompte;
-	
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public Login() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public Login() {
+		super();
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
-}
+	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -46,19 +45,19 @@ public class Login extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String login = request.getParameter("loginClient");
 		String mdp = request.getParameter("motDePasseClient");
-		boolean authentification = gestionclient.authenthifierClient(login, mdp);	
-		
-		if (authentification){
+		boolean authentification = gestionclient.authenthifierClient(login, mdp);
+
+		if (authentification) {
 			request.setAttribute("login", login);
 			request.setAttribute("client", gestionclient.getId());
-			
+
 			gestionclient.setLogin(login);
 			request.getSession().setAttribute("gestionClientsBean", gestionclient);
 			request.getSession().setAttribute("loginClient", gestionclient.getLogin());
 
-
 			this.getServletContext().getRequestDispatcher("/accueil").forward(request, response);
-		}else{
+
+		} else {
 			this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
 		}
 	}

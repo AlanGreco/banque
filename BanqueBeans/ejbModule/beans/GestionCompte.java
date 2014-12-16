@@ -17,18 +17,9 @@ import entities.Compte;
 import entities.CompteEpargne;
 import entities.ComptePlatine;
 import entities.CompteStandard;
-import entities.Mouvement;
 
 /**
  * Session Bean implementation class GestionCompte
- */
-/**
- * @author leocorone
- *
- */
-/**
- * @author leocorone
- *
  */
 /**
  * @author leocorone
@@ -38,7 +29,6 @@ import entities.Mouvement;
 public class GestionCompte implements GestionCompteRemote, GestionCompteLocal {
 
 	@EJB(name = "GestionHistoriqueRemote")
-	// @EJB(lookup="java:global/BanqueEar/BanqueBeans/GestionHistorique!beans.GestionHistoriqueRemote")
 	GestionHistorique gestionHistorique;
 
 	private static final Logger log = Logger.getLogger(GestionCompte.class.getName());
@@ -73,7 +63,6 @@ public class GestionCompte implements GestionCompteRemote, GestionCompteLocal {
 
 	@Override
 	public ArrayList<Compte> recupererCompteClient(int id) {
-		// TODO Auto-generated method stub
 		String request = "Select c from Compte c Where client_id = '" + id + "'";
 		@SuppressWarnings("unchecked")
 		ArrayList<Compte> listCompte = (ArrayList<Compte>) em.createQuery(request).getResultList();
@@ -92,39 +81,35 @@ public class GestionCompte implements GestionCompteRemote, GestionCompteLocal {
 	@Override
 	public boolean modifierSolde(int idCompte, double montant) {
 		Compte compte = getCompteById(idCompte);
-		// List<Mouvement> histo = compte.getHistoriqueMouvements();
 		Double nouveauSolde = (double) compte.getSolde() + montant;
+		String motif = (montant>=0?"Crédit":"Débit");
 
 		if (nouveauSolde >= 0 || montant >= 0) {
 			if (compte instanceof CompteEpargne) {
 				calculInteretEpargne(montant, (CompteEpargne) compte);
 			}
 			compte.setSolde(nouveauSolde);
-			// compte.setHistoriqueMouvements(histo);
-			gestionHistorique.ajouterMouvement(montant, compte, "Crédit");
+			gestionHistorique.ajouterMouvement(montant, compte, motif);
 		} else {
 
 			if (compte instanceof CompteStandard) {
 				Double nouveauSoldePenalise = (double) nouveauSolde - ((CompteStandard) compte).getPenalite();
 				compte.setSolde(nouveauSoldePenalise);
-				// compte.setHistoriqueMouvements(histo);
 				gestionHistorique.ajouterMouvement(-((CompteStandard) compte).getPenalite(), compte, "Pénalité");
 			} else if (compte instanceof ComptePlatine) {
 
 				if (nouveauSolde >= -((ComptePlatine) compte).getDecouvertAutorise()) {
 					compte.setSolde(nouveauSolde);
-					// compte.setHistoriqueMouvements(histo);
 				} else {
 					Double nouveauSoldePenalise = nouveauSolde - ((ComptePlatine) compte).getPenalite();
 					compte.setSolde(nouveauSoldePenalise);
-					// compte.setHistoriqueMouvements(histo);
 					gestionHistorique.ajouterMouvement(-((ComptePlatine) compte).getPenalite(), compte, "Pénalité");
 				}
 
 			} else {
 				return false;
 			}
-			gestionHistorique.ajouterMouvement(montant, compte, "Débit");
+			gestionHistorique.ajouterMouvement(montant, compte, motif);
 
 		}
 		em.merge(compte);

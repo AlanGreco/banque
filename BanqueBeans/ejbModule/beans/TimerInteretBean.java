@@ -1,6 +1,5 @@
 package beans;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.DependsOn;
 import javax.ejb.EJB;
@@ -29,8 +28,7 @@ public class TimerInteretBean {
 		// TODO Auto-generated constructor stub
 	}
 	
-	// Le versement des intêrets créditeur est effectué à interval régulier (normalement 1 fois par an) toutes les 10 minutes pour l'exemple
-	//@PostConstruct
+	// Le versement des intêrets créditeur est effectué à interval régulié (normalement 1 fois par an) toutes les 10 minutes pour l'exemple
 	@Schedule(minute = "*/10", hour = "*", persistent=false)
 	public void automaticTimeout() {
 		gestionComptes.crediterLesInterets();

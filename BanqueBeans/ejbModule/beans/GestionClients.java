@@ -33,14 +33,12 @@ public class GestionClients implements GestionClientsRemote, GestionClientsLocal
 
 	@Override
 	public Client ajouterClient(Client c) {
-		// TODO Auto-generated method stub
 		em.persist(c);
 		return c;
 	}
 
 	@Override
 	public void supprimerClient(Client c) {
-		// TODO Auto-generated method stub
 		c=em.find(Client.class,c.getId());
 		em.remove(c);
 
@@ -48,18 +46,22 @@ public class GestionClients implements GestionClientsRemote, GestionClientsLocal
 
 	@Override
 	public void modifierMotDePasse(String mdp, Client c) {
-		// TODO Auto-generated method stub
 		c=em.find(Client.class,c.getId());
 		c.setPassword(mdp);
 	}
 
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Client> getListeClients() {
-		// TODO Auto-generated method stub
 		return (List<Client>) em.createQuery("Select c from Client c").getResultList();
 	}
 
+	/* 
+	 * @see beans.GestionClientsRemote#authenthifierClient(java.lang.String, java.lang.String)
+	 * Méthode permettant de vérifier si un compte appartient bien à un client.
+	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean authenthifierClient(String login, String mdp) {
 		String request = "Select c from Client c Where login = '"+login+"'";

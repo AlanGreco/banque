@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.ejb.EJB;
-import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -34,7 +33,6 @@ public class Operation extends HttpServlet {
 	 */
 	public Operation() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -78,6 +76,8 @@ public class Operation extends HttpServlet {
 			this.getServletContext().getRequestDispatcher("/comptes").forward(request, response);
 
 		} else if ("virement".equals(type)) {
+			
+			//On vérifie les arguments passé en paramètre par le client
 			String pMontant = request.getParameter("montant");
 			String pIdCompte1 = request.getParameter("selectedCompte");
 			String pIdCompte2 = request.getParameter("selectedCompte2");
@@ -90,7 +90,7 @@ public class Operation extends HttpServlet {
 				int idCompte2 = Integer.parseInt(pIdCompte2);
 
 				boolean authentifier = gestionCompte.verificationAppartenanceCompte(gestionClient.getId(), idCompte1);
-				authentifier &= gestionCompte.verificationAppartenanceCompte(gestionClient.getId(), idCompte2);
+				authentifier &= gestionCompte.verificationAppartenanceCompte(gestionClient.getId(), idCompte2);  // On vérifie si les comptes appartienne bien au client connecté
 
 				if (iMontant > 0 && authentifier) {
 					gestionCompte.effectuerVirement(idCompte1, idCompte2, iMontant);

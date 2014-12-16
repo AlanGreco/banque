@@ -32,7 +32,6 @@ public class NouveauCompte extends HttpServlet {
 	 */
 	public NouveauCompte() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
